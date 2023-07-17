@@ -19,4 +19,12 @@ class Message {
       'timestamp': timestamp
     };
   }
+
+  factory Message.fromJson(Map json) => Message(
+        json['senderId'],
+        json['senderEmail'],
+        json['receiverId'],
+        json['message'],
+        json['timestamp'],
+      );
 }

@@ -1,5 +1,6 @@
 import 'package:chat_app/components/chat_bubble.dart';
 import 'package:chat_app/components/my_textfield.dart';
+import 'package:chat_app/model/message_model.dart';
 import 'package:chat_app/services/chat/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -100,13 +101,15 @@ class _ChatPageState extends State<ChatPage> {
   Widget _buildMessageItem(DocumentSnapshot document) {
     Map<String, dynamic> data = document.data() as Map<String, dynamic>;
 
+    Message message = Message.fromJson(data);
+
     // align messages
 
-    var aligment = (data['senderId'] == _firebaseAuth.currentUser!.uid)
+    var aligment = (message.senderId == _firebaseAuth.currentUser!.uid)
         ? Alignment.centerRight
         : Alignment.centerLeft;
     // colors
-    var color = (data['senderId'] == _firebaseAuth.currentUser!.uid)
+    var color = (message.senderId == _firebaseAuth.currentUser!.uid)
         ? Colors.blueGrey.shade200
         : Colors.indigo.shade200;
 
@@ -116,16 +119,16 @@ class _ChatPageState extends State<ChatPage> {
         alignment: aligment,
         child: Column(
           crossAxisAlignment:
-              (data['senderId'] == _firebaseAuth.currentUser!.uid)
+              (message.senderId == _firebaseAuth.currentUser!.uid)
                   ? CrossAxisAlignment.end
                   : CrossAxisAlignment.start,
           mainAxisAlignment:
-              (data['senderId'] == _firebaseAuth.currentUser!.uid)
+              (message.senderId == _firebaseAuth.currentUser!.uid)
                   ? MainAxisAlignment.end
                   : MainAxisAlignment.start,
           children: [
             ChatBubble(
-              message: data['message'],
+              message: message.message,
               color: color,
             ),
           ],

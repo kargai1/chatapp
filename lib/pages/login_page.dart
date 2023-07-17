@@ -33,45 +33,48 @@ class _LoginPageState extends State<LoginPage> {
             colors: [Color.fromARGB(255, 57, 111, 131), Color(0XFF262634)]),
       ),
       child: Scaffold(
-        body: SafeArea(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.chat,
-                    size: 100,
-                  ),
-                  const Text('W E L C O M E   B A C K',
-                      style: TextStyle(color: Colors.white)),
-                  const SizedBox(height: 20),
-                  MyTextField(
-                      controller: emailController,
-                      hintText: "Email",
-                      obscureText: false),
-                  const SizedBox(height: 10),
-                  MyTextField(
-                      controller: passwordController,
-                      hintText: "Password",
-                      obscureText: true),
-                  const SizedBox(height: 10),
-                  MyButtton(label: "Sign In", onTap: signIn),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Not a member"),
-                      TextButton(
-                        onPressed: widget.onTap,
-                        child: const Text(
-                          "Register Now",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      )
-                    ],
-                  )
-                ],
+        body: SingleChildScrollView(
+          child: SafeArea(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+                    const Icon(
+                      Icons.chat,
+                      size: 100,
+                    ),
+                    const Text('W E L C O M E   B A C K',
+                        style: TextStyle(color: Colors.white)),
+                    const SizedBox(height: 20),
+                    MyTextField(
+                        controller: emailController,
+                        hintText: "Email",
+                        obscureText: false),
+                    const SizedBox(height: 10),
+                    MyTextField(
+                        controller: passwordController,
+                        hintText: "Password",
+                        obscureText: true),
+                    const SizedBox(height: 10),
+                    MyButtton(label: "Sign In", onTap: signIn),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("Not a member"),
+                        TextButton(
+                          onPressed: widget.onTap,
+                          child: const Text(
+                            "Register Now",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),

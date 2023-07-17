@@ -1,4 +1,5 @@
 import 'package:chat_app/model/user_model.dart';
+import 'package:chat_app/pages/nav_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +22,9 @@ class _HomePageState extends State<HomePage> {
 
   // sign out
   signOut() {
-    authController.signOut();
-    setState(() {});
+    setState(() {
+      authController.signOut();
+    });
   }
 
   @override
@@ -58,9 +60,7 @@ class _HomePageState extends State<HomePage> {
           return const Center(child: CircularProgressIndicator());
         }
 
-        return GridView(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2),
+        return ListView(
           children: snapshot.data!.docs
               .map<Widget>((doc) => _buildUserListItem(doc))
               .toList(),
@@ -73,83 +73,34 @@ class _HomePageState extends State<HomePage> {
     Map<String, dynamic> data = document.data() as Map<String, dynamic>;
     UserModel user = UserModel.fromJson(data);
     if (_auth.currentUser!.email != user.email) {
-      return Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: GestureDetector(
-              onTap: () {
-                Get.to(ChatPage(
-                  user: user,
-                ));
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Color(0XFFA2C9FF), Color(0XFF262634)]),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundImage: NetworkImage(user.photoUrl),
-                    ),
-                    Text(
-                      '${user.name} ${user.surName}',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 20, color: Colors.white),
-                    ),
-                    Flexible(
-                      child: Text(
-                        user.email,
-                        style: TextStyle(color: Colors.grey[400], fontSize: 10),
+      return Column(
+        children: [
+          Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              child: GestureDetector(
+                  onTap: () {
+                    Get.to(ChatPage(
+                      user: user,
+                    ));
+                  },
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        user.photoUrl,
                       ),
+                      radius: 40,
                     ),
-                  ],
-                ),
-              ),
-            )),
+                    title: Text(user.name + ' ' + user.surName),
+                    subtitle: Text(user.email),
+                  ))),
+          const Divider(
+            color: Colors.white,
+          )
+        ],
       );
     } else {
-      return Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            gradient: const LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0XFFA2C9FF), Color(0XFF262634)]),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                radius: 40,
-                backgroundImage: NetworkImage(user.photoUrl),
-              ),
-              Text(
-                '${user.name} ${user.surName}',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 20, color: Colors.white),
-              ),
-              Flexible(
-                child: Text(
-                  user.email,
-                  style: TextStyle(color: Colors.grey[400], fontSize: 10),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
+      return Container();
     }
   }
 }

@@ -39,9 +39,16 @@ class AuthService extends GetxController {
       singInWithEmailAndPassword(email, password);
       Get.snackbar('Done!', 'You can login now');
 
-      _firestore.collection("users").doc(userCredential.user!.uid).set(
-          UserModel.toJson(UserModel(
-              userCredential.user!.uid, email, name, surName, photoUrl)));
+      _firestore
+          .collection("users")
+          .doc(userCredential.user!.uid)
+          .set(UserModel.toJson(UserModel(
+            userCredential.user!.uid,
+            email,
+            name,
+            surName,
+            photoUrl,
+          )));
 
       return userCredential;
     } on FirebaseAuthException catch (e) {

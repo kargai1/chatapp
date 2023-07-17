@@ -1,4 +1,5 @@
 import 'package:chat_app/model/message_model.dart';
+import 'package:chat_app/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -7,6 +8,7 @@ class ChatService extends GetxController {
   // get instance of auth and firestore
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  // its a Set for the get contacts
 
   // Send Message
   Future<void> sendMessage(String receiverId, String message) async {
@@ -37,6 +39,22 @@ class ChatService extends GetxController {
         .doc(chatRoomId)
         .collection('messages')
         .add(newmessage.toMap());
+
+    //add receivers id to Set
+    //Contact set as map
+
+    // add firestore the contact's id's
+    await _firestore
+        .collection('users')
+        .doc(_firebaseAuth.currentUser!.uid)
+        .collection('contacts')
+        .add({'contacts': receiverId});
+
+    await _firestore
+        .collection('users')
+        .doc(receiverId)
+        .collection('contacts')
+        .add({'contacts': _firebaseAuth.currentUser!.uid});
   }
 
   //Get Messages

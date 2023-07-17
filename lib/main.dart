@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           appBarTheme: const AppBarTheme(
-              backgroundColor: Colors.transparent, elevation: 0),
+              backgroundColor: Colors.transparent, elevation: 1),
           cardColor: Colors.blueGrey[200],
           primarySwatch: Colors.blueGrey,
           scaffoldBackgroundColor: Colors.transparent),
