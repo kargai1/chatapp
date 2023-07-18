@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:intl/intl.dart';
 import '../model/user_model.dart';
 
 class ChatPage extends StatefulWidget {
@@ -94,7 +94,6 @@ class _ChatPageState extends State<ChatPage> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text('loading');
         }
-
         return ListView(
           children: snapshot.data!.docs
               .map((document) => _buildMessageItem(document))
@@ -125,6 +124,10 @@ class _ChatPageState extends State<ChatPage> {
         ? Theme.of(context).scaffoldBackgroundColor
         : Theme.of(context).cardColor;
 
+    // convert timestamp to string
+    String formattedDate = DateFormat('h:mm').format(
+        DateTime.fromMillisecondsSinceEpoch(message.timestamp.seconds * 1000));
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -143,6 +146,7 @@ class _ChatPageState extends State<ChatPage> {
               message: message.message,
               color: color,
               textColor: textColor,
+              messageTime: formattedDate,
             ),
           ],
         ),
@@ -167,9 +171,7 @@ class _ChatPageState extends State<ChatPage> {
                 obscureText: false,
               ),
             ),
-
             //send button
-
             IconButton(
               icon: const Icon(
                 Icons.send_outlined,

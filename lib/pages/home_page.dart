@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../components/my_textfield.dart';
 import '../services/auth/auth_service.dart';
 import 'chat_page.dart';
 
