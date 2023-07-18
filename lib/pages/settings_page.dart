@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:chat_app/components/my_button.dart';
 import 'package:chat_app/components/my_textfield.dart';
 import 'package:chat_app/model/user_model.dart';
+import 'package:chat_app/services/auth/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +21,12 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController surNameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  //put auth contorller for update user information
+  final AuthService _authService = Get.put(AuthService());
 
   //put storage contoroller
   final StorageService storageService = Get.put(StorageService());
@@ -30,55 +35,52 @@ class _SettingsPageState extends State<SettingsPage> {
   File? _image;
   void imageFromGallery() async {
     await storageService.imageFromGallery(_image);
-
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color.fromARGB(255, 57, 111, 131), Color(0XFF262634)]),
-        ),
-        child: Scaffold(
-            appBar: AppBar(title: const Text('Settings')),
-            body: FutureBuilder(
-                future: FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(_auth.currentUser!.uid)
-                    .get(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return const Text('Error');
-                  }
+    return Scaffold(
+        appBar: AppBar(
+            title: Text(
+          'Settings',
+          style: Theme.of(context).textTheme.headlineSmall,
+        )),
+        body: FutureBuilder(
+            future: FirebaseFirestore.instance
+                .collection('users')
+                .doc(_auth.currentUser!.uid)
+                .get(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Text('Error');
+              }
 
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
 
-                  Map<String, dynamic> data =
-                      snapshot.data!.data() as Map<String, dynamic>;
-                  UserModel currentUser = UserModel.fromJson(data);
-                  storageService.photoUrl.value = currentUser.photoUrl;
+              Map<String, dynamic> data =
+                  snapshot.data!.data() as Map<String, dynamic>;
+              UserModel currentUser = UserModel.fromJson(data);
+              storageService.photoUrl.value = currentUser.photoUrl;
 
-                  return SettingsView(currentUser);
-                })));
+              return settingsView(currentUser);
+            }));
   }
 
-  Widget SettingsView(UserModel user) {
+  Widget settingsView(UserModel user) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Stack(
           children: [
-            CircleAvatar(
-              radius: 60,
-              backgroundImage: NetworkImage(storageService.photoUrl.value),
+            Obx(
+              () => CircleAvatar(
+                radius: 60,
+                backgroundImage: NetworkImage(storageService.photoUrl.value),
+              ),
             ),
             Positioned(
               bottom: -5,
@@ -87,7 +89,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   onPressed: imageFromGallery,
                   icon: Icon(
                     Icons.photo_camera_rounded,
-                    color: Colors.grey.shade300,
+                    color: Theme.of(context).primaryColor,
                     size: 30,
                   )),
             ),
@@ -102,12 +104,48 @@ class _SettingsPageState extends State<SettingsPage> {
             controller: surNameController,
             hintText: user.surName,
             obscureText: false),
+        MyTextField(
+          controller: descriptionController,
+          hintText: user.description,
+          obscureText: false,
+        ),
         Text(
           user.email,
-          style: const TextStyle(color: Colors.white),
         ),
-        const SizedBox(height: 20),
-        MyButtton(label: 'Edit Profile', onTap: () {})
+        const Divider(),
+        MyButtton(
+            label: 'Edit Profile',
+            onTap: () async {
+              if (nameController.text.isEmpty) {
+                _authService.updateUserInfo(
+                  user.userId,
+                  user.email,
+                  user.name,
+                  surNameController.text,
+                  storageService.photoUrl.value,
+                );
+              } else if (surNameController.text.isEmpty) {
+                _authService.updateUserInfo(
+                  user.userId,
+                  user.email,
+                  nameController.text,
+                  user.surName,
+                  storageService.photoUrl.value,
+                );
+              } else {
+                _authService.updateUserInfo(
+                    user.userId,
+                    user.email,
+                    nameController.text,
+                    surNameController.text,
+                    storageService.photoUrl.value);
+              }
+
+              setState(() {
+                nameController.clear();
+                surNameController.clear();
+              });
+            })
       ],
     );
   }

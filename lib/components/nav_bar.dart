@@ -29,15 +29,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
     return Scaffold(
       body: _pageList[value],
       bottomNavigationBar: Container(
-        color: Colors.blueGrey.shade200,
+        color: Theme.of(context).cardColor,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
           child: GNav(
-            padding:const EdgeInsets.all(16) ,
-            tabBackgroundColor: Colors.white,
+              padding: const EdgeInsets.all(16),
+              tabBackgroundColor: Colors.white,
               gap: 8,
-              backgroundColor: Colors.blueGrey.shade200,
-              color: Colors.white,
+              backgroundColor: Theme.of(context).cardColor,
+              color: Theme.of(context).scaffoldBackgroundColor,
+              activeColor: Theme.of(context).cardColor,
               selectedIndex: value,
               onTabChange: _navBottomBar,
               tabs: const [

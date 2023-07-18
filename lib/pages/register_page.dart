@@ -69,84 +69,99 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color.fromARGB(255, 57, 111, 131), Color(0XFF262634)]),
-      ),
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: SafeArea(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Column(
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    
-                     SizedBox(height: MediaQuery.of(context).size.height*0.1),
-                    Stack(
-                      children: [
-                        Obx(() => CircleAvatar(
+                    Text('C H A T M E ',
+                        style: Theme.of(context).textTheme.titleLarge),
+                    Icon(
+                      Icons.chat,
+                      size: 50,
+                      color: Theme.of(context).cardColor,
+                    ),
+                  ],
+                ),
+                Stack(
+                  children: [
+                    Obx(() => Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Theme.of(context).cardColor),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor),
+                            child: CircleAvatar(
                               radius: 50,
                               backgroundImage:
                                   NetworkImage(storageService.photoUrl.value),
-                            )),
-                        Positioned(
-                          bottom: -5,
-                          right: -10,
-                          child: IconButton(
-                              onPressed: imageFromGallery,
-                              icon: Icon(
-                                Icons.photo_camera_rounded,
-                                color: Colors.grey.shade300,
-                                size: 30,
-                              )),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    MyTextField(
-                        controller: nameController,
-                        hintText: "Name",
-                        obscureText: false),
-                    MyTextField(
-                        controller: surNameController,
-                        hintText: "Surname",
-                        obscureText: false),
-                    MyTextField(
-                        controller: emailController,
-                        hintText: "Email",
-                        obscureText: false),
-                    MyTextField(
-                        controller: passwordController,
-                        hintText: "Password",
-                        obscureText: true),
-                    MyTextField(
-                        controller: confirmController,
-                        hintText: "Confirm your password",
-                        obscureText: true),
-                    MyButtton(label: "Sign Up", onTap: signUp),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text("Already a member?"),
-                        TextButton(
-                          onPressed: widget.onTap,
-                          child: const Text(
-                            "Login Now",
-                            style: TextStyle(color: Colors.white),
+                            ),
                           ),
-                        )
-                      ],
-                    )
+                        )),
+                    Positioned(
+                      bottom: -5,
+                      right: -12,
+                      child: IconButton(
+                          onPressed: imageFromGallery,
+                          icon: Icon(
+                            Icons.photo_camera_rounded,
+                            color: Theme.of(context).primaryColor,
+                            size: 30,
+                          )),
+                    ),
                   ],
                 ),
-              ),
+                Text('W E L C O M E',
+                    style: Theme.of(context).textTheme.titleLarge),
+                const SizedBox(
+                  height: 5,
+                ),
+                MyTextField(
+                    controller: nameController,
+                    hintText: "Name",
+                    obscureText: false),
+                MyTextField(
+                    controller: surNameController,
+                    hintText: "Surname",
+                    obscureText: false),
+                MyTextField(
+                    controller: emailController,
+                    hintText: "Email",
+                    obscureText: false),
+                MyTextField(
+                    controller: passwordController,
+                    hintText: "Password",
+                    obscureText: true),
+                MyTextField(
+                    controller: confirmController,
+                    hintText: "Confirm your password",
+                    obscureText: true),
+                MyButtton(label: "Sign Up", onTap: signUp),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Already a member?"),
+                    TextButton(
+                      onPressed: widget.onTap,
+                      child: const Text(
+                        "Login Now",
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    )
+                  ],
+                )
+              ],
             ),
           ),
         ),

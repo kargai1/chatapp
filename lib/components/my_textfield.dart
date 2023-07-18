@@ -15,20 +15,22 @@ class MyTextField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 5.0, left: 20, right: 20),
       child: TextField(
+        style: TextStyle(color: Theme.of(context).cardColor),
+        cursorColor: Theme.of(context).cardColor,
         controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
           hintText: hintText,
           filled: true,
-          fillColor: const Color.fromARGB(146, 175, 201, 223),
+          fillColor: Theme.of(context).scaffoldBackgroundColor,
           focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(
-                color: Colors.black,
+                color: Colors.white,
               ),
               borderRadius: BorderRadius.all(Radius.circular(25))),
-          enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white),
-              borderRadius: BorderRadius.all(Radius.circular(25))),
+          enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Theme.of(context).cardColor),
+              borderRadius: const BorderRadius.all(Radius.circular(25))),
         ),
       ),
     );

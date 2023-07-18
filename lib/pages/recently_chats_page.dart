@@ -1,6 +1,5 @@
 import 'package:chat_app/model/user_model.dart';
 import 'package:chat_app/pages/chat_page.dart';
-import 'package:chat_app/services/chat/chat_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,18 +18,14 @@ class _ConsversationsPageState extends State<ConsversationsPage> {
   @override
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color.fromARGB(255, 57, 111, 131), Color(0XFF262634)]),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Recently Conversations',
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
         ),
-        child: Scaffold(
-            appBar: AppBar(
-              title: const Text('Recently Conversations'),
-            ),
-            body: _buildConversationsList()));
+        body: _buildConversationsList());
   }
 
   Widget _buildConversationsList() {
@@ -85,11 +80,14 @@ class _ConsversationsPageState extends State<ConsversationsPage> {
             onTap: () {
               Get.to(ChatPage(user: user));
             },
-            child: ListTile(
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(user.photoUrl),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(user.photoUrl),
+                ),
+                title: Text('${user.name} ${user.surName}'),
               ),
-              title: Text('${user.name} ${user.surName}'),
             ),
           ),
         );

@@ -39,20 +39,22 @@ class AuthService extends GetxController {
       singInWithEmailAndPassword(email, password);
       Get.snackbar('Done!', 'You can login now');
 
-      _firestore
-          .collection("users")
-          .doc(userCredential.user!.uid)
-          .set(UserModel.toJson(UserModel(
-            userCredential.user!.uid,
-            email,
-            name,
-            surName,
-            photoUrl,
-          )));
+      _firestore.collection("users").doc(userCredential.user!.uid).set(
+          UserModel.toJson(UserModel(userCredential.user!.uid, email, name,
+              surName, photoUrl, 'Hey I am using ChatMe')));
 
       return userCredential;
     } on FirebaseAuthException catch (e) {
       Get.snackbar('Error', e.message.toString());
     }
+  }
+
+  void updateUserInfo(String uid, String email, String name, String surName,
+      String photoUrl) async {
+    await _firestore
+        .collection('users')
+        .doc(_firebaseAuth.currentUser!.uid)
+        .update(UserModel.toJson(UserModel(
+            uid, email, name, surName, photoUrl, 'Hey I am using ChatMe')));
   }
 }

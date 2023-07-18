@@ -1,10 +1,10 @@
 import 'package:chat_app/model/user_model.dart';
-import 'package:chat_app/pages/nav_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../components/my_textfield.dart';
 import '../services/auth/auth_service.dart';
 import 'chat_page.dart';
 
@@ -20,6 +20,8 @@ class _HomePageState extends State<HomePage> {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  TextEditingController searchController = TextEditingController();
+
   // sign out
   signOut() {
     setState(() {
@@ -29,23 +31,23 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color.fromARGB(255, 57, 111, 131), Color(0XFF262634)]),
-      ),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Home Page"),
-          actions: [
-            // sing out button
-            IconButton(onPressed: signOut, icon: const Icon(Icons.logout))
-          ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Home Page",
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
-        body: _buildUserList(),
+        actions: [
+          // sing out button
+          IconButton(
+              onPressed: signOut,
+              icon: Icon(
+                Icons.logout,
+                color: Theme.of(context).iconTheme.color,
+              ))
+        ],
       ),
+      body: _buildUserList(),
     );
   }
 
@@ -91,12 +93,12 @@ class _HomePageState extends State<HomePage> {
                       ),
                       radius: 40,
                     ),
-                    title: Text(user.name + ' ' + user.surName),
-                    subtitle: Text(user.email),
+                    title: Text('${user.name} ${user.surName}',
+                        style: Theme.of(context).textTheme.titleMedium),
+                    subtitle: Text(user.email,
+                        style: Theme.of(context).textTheme.titleSmall),
                   ))),
-          const Divider(
-            color: Colors.white,
-          )
+          const Divider()
         ],
       );
     } else {
